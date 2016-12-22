@@ -23,6 +23,7 @@
 #'
 #' @docType package
 #' @name mimager
+#' @importFrom methods setGeneric setMethod
 #' @importClassesFrom affy AffyBatch
 #' @importClassesFrom affyPLM PLMset
 #' @importClassesFrom oligoClasses FeatureSet
@@ -30,4 +31,5 @@
 #' @importFrom Biobase featureNames sampleNames
 #' @importFrom grid unit gpar
 #' @import gtable
+#' @import S4Vectors
 NULL
