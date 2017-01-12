@@ -12,6 +12,5 @@ bioc_packages:
 
 before_script:
   - R CMD BiocCheck .
-
 after_success:
   - Rscript -e "covr::codecov()"
