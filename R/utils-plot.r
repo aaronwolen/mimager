@@ -1,5 +1,5 @@
 # construct a single image with optional title
-build_image <- function(x, fixed, label, fontsize) {
+build_image <- function(x, fixed, label = NULL, fontsize = NULL) {
   if (fixed) {
     width <- height <- NULL
   } else {
@@ -11,7 +11,7 @@ build_image <- function(x, fixed, label, fontsize) {
 
   imgGrob <- rasterGrob(x, interpolate = FALSE, width = width, height = height)
 
-  if (is.na(label)) {
+  if (is.null(label) || is.na(label)) {
     labelGrob <- nullGrob()
   } else {
     labelGrob <- textGrob(label, gp = gpar(fontsize = fontsize))
@@ -22,6 +22,29 @@ build_image <- function(x, fixed, label, fontsize) {
     grobs = matrix(list(labelGrob, imgGrob), nrow = 2),
     heights = unit(c(2, 1), c("grobheight", "null"), list(labelGrob, NULL)),
     widths = unit(1, "null"),
+    respect = fixed
+  )
+}
+
+# construct a gtable of grobs
+#
+# x: a list of 1 or more grobs
+build_image_table <- function(x, nrow = NULL, ncol = NULL, fixed = FALSE) {
+
+  # table layout
+  n <- length(x)
+  dims <- layout_dims(n, nrow, ncol)
+  dims <- trim_dims(n, dims[1], dims[2])
+
+  # fill-in empty cells
+  grobs <- lapply(x[seq_len(prod(dims))], "%||%", grid::nullGrob())
+
+  grobs <- matrix(grobs, nrow = dims[1], ncol = dims[2], byrow = TRUE)
+  gtable_matrix(
+    name = "image.table",
+    grobs = grobs,
+    heights = rep(unit(1, "grobheight", grobs[[1]]), dims[1]),
+    widths  = rep(unit(1, "grobwidth",  grobs[[1]]), dims[2]),
     respect = fixed
   )
 }

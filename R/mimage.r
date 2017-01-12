@@ -254,39 +254,26 @@ setMethod("mimage", c(object = "array"),
   object <- transform(object)
   object <- trim_values(object, trim)
 
-  # layout plot table
-  n <- dim(object)[3]
-  dims <- layout_dims(n, nrow, ncol)
-  dims <- trim_dims(n, dims[1], dims[2])
-
   if (is.null(dimnames(object))) dimnames(object) <- list(NULL, NULL, NULL)
   labels <- dimnames(object)[[3]] %||% NA_character_
 
+  # build legend
   legend <- train_legend(object, colors)
-  obj.colors <- scale_colors(object, legend$palette)
-  obj.colors <- lapply(seq_len(n), function(i) obj.colors[,, i])
-
-  imgs <- Map(build_image, x = obj.colors,
-              fixed = fixed, label = labels, fontsize = fontsize)
-
-  # fill-in empty cells
-  imgs <- lapply(imgs[seq_len(prod(dims))], "%||%", grid::nullGrob())
-  imgs <- matrix(imgs, nrow = dims[1], ncol = dims[2], byrow = TRUE)
-
-  img.table <- gtable_matrix(
-    name = "image.table",
-    grobs = imgs,
-    heights = rep(unit(1, "grobheight", imgs[[1]]), dims[1]),
-    widths  = rep(unit(1, "grobwidth",  imgs[[1]]), dims[2]),
-    respect = fixed
-  )
-
   legend.table <- build_legend(legend$breaks,
                                legend$fill,
                                legend$labels,
                                legend.label,
                                fontsize)
 
+  # rasterize values
+  obj.colors <- scale_colors(object, legend$palette)
+  obj.colors <- lapply(seq_len(dim(object)[3]), function(i) obj.colors[,, i])
+
+  # build image table
+  imgs <- Map(build_image, obj.colors, fixed, labels, fontsize)
+  img.table <- build_image_table(imgs, nrow, ncol, fixed)
+
+  # tweak layout
   final.table <- gtable_add_cols(img.table, gtable_width(legend.table))
   final.table <- gtable_add_grob(final.table, legend.table,
                   t = 1,
