@@ -9,12 +9,15 @@ build_image <- function(x, fixed, label = NULL, fontsize = NULL) {
     height <- unit(diff(y.rng), "native")
   }
 
-  imgGrob <- rasterGrob(x, interpolate = FALSE, width = width, height = height)
+  imgGrob <- grid::rasterGrob(x,
+                              interpolate = FALSE,
+                              width = width,
+                              height = height)
 
   if (is.null(label) || is.na(label)) {
-    labelGrob <- nullGrob()
+    labelGrob <- grid::nullGrob()
   } else {
-    labelGrob <- textGrob(label, gp = gpar(fontsize = fontsize))
+    labelGrob <- grid::textGrob(label, gp = gpar(fontsize = fontsize))
   }
 
   gtable_matrix(
