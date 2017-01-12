@@ -1,3 +1,31 @@
+# construct a single image with optional title
+build_image <- function(x, fixed, label, fontsize) {
+  if (fixed) {
+    width <- height <- NULL
+  } else {
+    x.rng <- range(seq_len(nrow(x)) / nrow(x))
+    y.rng <- range(seq_len(ncol(x)) / ncol(x))
+    width  <- unit(diff(x.rng), "native")
+    height <- unit(diff(y.rng), "native")
+  }
+
+  imgGrob <- rasterGrob(x, interpolate = FALSE, width = width, height = height)
+
+  if (is.na(label)) {
+    labelGrob <- nullGrob()
+  } else {
+    labelGrob <- textGrob(label, gp = gpar(fontsize = fontsize))
+  }
+
+  gtable_matrix(
+    name = imgGrob$name,
+    grobs = matrix(list(labelGrob, imgGrob), nrow = 2),
+    heights = unit(c(2, 1), c("grobheight", "null"), list(labelGrob, NULL)),
+    widths = unit(1, "null"),
+    respect = fixed
+  )
+}
+
 # based on ggplot2:::wrap_dims() by @hadleywickham
 layout_dims <- function(n, nrow = NULL, ncol = NULL) {
   if (is.null(ncol) && is.null(nrow)) {

@@ -260,54 +260,24 @@ setMethod("mimage", c(object = "array"),
   dims <- trim_dims(n, dims[1], dims[2])
 
   if (is.null(dimnames(object))) dimnames(object) <- list(NULL, NULL, NULL)
-  # TODO: No reason to label 'sample'
-  if (is.null(dimnames(object)[[3]]))
-    dimnames(object)[[3]] <- paste0("sample", seq_len(n))
+  labels <- dimnames(object)[[3]] %||% NA_character_
 
-  labels <- dimnames(object)[[3]]
   legend <- train_legend(object, colors)
   obj.colors <- scale_colors(object, legend$palette)
+  obj.colors <- lapply(seq_len(n), function(i) obj.colors[,, i])
 
-  obj.raster <- lapply(labels, function(l) {
-    grid::rasterGrob(obj.colors[,, l],
-                     interpolate = FALSE,
-                     name = paste0("image.", l))
-  })
+  imgs <- Map(build_image, x = obj.colors,
+              fixed = fixed, label = labels, fontsize = fontsize)
 
-  if (!fixed) {
-    x.rng <- range(seq_len(nrow(object)) / nrow(object))
-    y.rng <- range(seq_len(ncol(object)) / ncol(object))
+  # fill-in empty cells
+  imgs <- lapply(imgs[seq_len(prod(dims))], "%||%", grid::nullGrob())
+  imgs <- matrix(imgs, nrow = dims[1], ncol = dims[2], byrow = TRUE)
 
-    obj.raster <- lapply(obj.raster, grid::editGrob,
-           width  = unit(diff(x.rng), "native"),
-           height = unit(diff(y.rng), "native"))
-  }
-
-  obj.raster <- lapply(obj.raster[1:prod(dims)], "%||%", grid::nullGrob())
-  obj.raster <- matrix(obj.raster, nrow = dims[1], ncol = dims[2], byrow = TRUE)
-
-  obj.labels <- lapply(labels, function(l) {
-   grid::textGrob(l,
-                  name = paste0("label.", l),
-                  gp = gpar(fontsize = fontsize))
-  })
-
-  obj.labels <- lapply(obj.labels[1:prod(dims)], "%||%", grid::nullGrob())
-  obj.labels <- matrix(obj.labels, nrow = dims[1], ncol = dims[2], byrow = TRUE)
-
-  row.order <- order(rep(seq_len(dims[1]), 2))
-
-  img.unit <- unit(1, "null")
-  lbl.unit <- unit(2, "grobheight", obj.labels[[1]])
-
-  heights <- rep(grid::unit.c(lbl.unit, img.unit), dims[1])
-  widths  <- rep(unit(1, "null"), dims[2])
-
-  final.table <- gtable_matrix(
+  img.table <- gtable_matrix(
     name = "image.table",
-    grobs = rbind(obj.labels, obj.raster)[row.order, , drop = FALSE],
-    heights = heights,
-    widths = widths,
+    grobs = imgs,
+    heights = rep(unit(1, "grobheight", imgs[[1]]), dims[1]),
+    widths  = rep(unit(1, "grobwidth",  imgs[[1]]), dims[2]),
     respect = fixed
   )
 
@@ -317,9 +287,9 @@ setMethod("mimage", c(object = "array"),
                                legend.label,
                                fontsize)
 
-  final.table <- gtable_add_cols(final.table, gtable_width(legend.table))
+  final.table <- gtable_add_cols(img.table, gtable_width(legend.table))
   final.table <- gtable_add_grob(final.table, legend.table,
-                  t = 2,
+                  t = 1,
                   b = nrow(final.table),
                   l = ncol(final.table),
                   r = ncol(final.table))
