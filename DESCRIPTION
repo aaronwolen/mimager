@@ -1,7 +1,7 @@
 Package: mimager
 Version: 0.99.5
 Type: Package
-Title: mimager: The Microarray Imager
+Title: The Microarray Imager
 Description: Easily visualize and inspect microarrays for spatial
         artifacts.
 Authors@R: person("Aaron", "Wolen", , "aaron@wolen.com", c("aut",

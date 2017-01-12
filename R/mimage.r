@@ -260,11 +260,8 @@ setMethod("mimage", c(object = "array"),
   dims <- trim_dims(n, dims[1], dims[2])
 
   if (is.null(dimnames(object))) dimnames(object) <- list(NULL, NULL, NULL)
-  # TODO: No reason to label 'sample'
-  if (is.null(dimnames(object)[[3]]))
-    dimnames(object)[[3]] <- paste0("sample", seq_len(n))
-
   labels <- dimnames(object)[[3]]
+
   legend <- train_legend(object, colors)
   obj.colors <- scale_colors(object, legend$palette)
 
