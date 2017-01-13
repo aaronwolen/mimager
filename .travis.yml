@@ -5,6 +5,8 @@ r:
 sudo: false
 cache: packages
 
+r_github_packages:
+  - jimhester/lintr
 r_packages:
   - covr
 bioc_packages:
