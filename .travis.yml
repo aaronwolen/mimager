@@ -1,9 +1,10 @@
 language: r
+os: linux
+cache: packages
+
 r:
   - bioc-release
   - bioc-devel
-sudo: false
-cache: packages
 
 r_packages:
   - covr
@@ -12,6 +13,5 @@ bioc_packages:
 
 before_script:
   - R CMD BiocCheck .
-
 after_success:
   - Rscript -e "covr::codecov()"
