@@ -15,7 +15,7 @@
 #'     probe level data
 #'    \item \code{\link[affyPLM]{PLMset-class}} for probe-level
 #'      linear models fitted to Affymetrix GeneChip probe level data
-#'    \item \code{\link[oligoClasses]{FeatureSet-class}} for storing
+#'    \item \code{\link[oligoClasses]{FeatureSetExtensions-class}} for storing
 #'      Expression/Exon/SNP data from a variety of oligonucleotide platforms
 #'    \item \code{\link[oligo]{oligoPLM-class}} for probe-level linear models
 #'      fitted to any of the \code{FeatureSet}-like classes

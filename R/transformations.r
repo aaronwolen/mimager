@@ -52,7 +52,7 @@ arank <- function(x, na.last = TRUE, ties.method = "first") {
 #'
 #' @return an \code{\link{array}} with the same dimensions as \code{x}
 #' @family array transformations
-#' @seealso \code{\link[affyPLM]{RLE}}
+#' @seealso \code{\link[oligo]{RLE}}
 #' @export
 arle <- function(x, log2 = TRUE, normalize = TRUE) {
   if (log2) x <- log2(x)
