@@ -9,7 +9,7 @@ arank(x, na.last = TRUE, ties.method = "first")
 \arguments{
 \item{x}{a three-dimensional \code{\link{array}} of matrices}
 
-\item{na.last}{for controlling the treatment of \code{\link{NA}}s.
+\item{na.last}{for controlling the treatment of \code{\link[base]{NA}}s.
     If \code{TRUE}, missing values in the data are put last; if
     \code{FALSE}, they are put first; if \code{NA}, they are removed; if
     \code{"keep"} they are kept with rank \code{NA}.}
@@ -35,6 +35,7 @@ if (require(affydata, quietly = TRUE)) {
 \seealso{
 \code{\link[base]{rank}}
 
-Other array.transformations: \code{\link{arle}}
+Other array transformations: 
+\code{\link{arle}()}
 }
-
+\concept{array transformations}

@@ -30,8 +30,9 @@ if (require(affydata, quietly = TRUE)) {
 
 }
 \seealso{
-\code{\link[affyPLM]{RLE}}
+\code{\link[oligo]{RLE}}
 
-Other array.transformations: \code{\link{arank}}
+Other array transformations: 
+\code{\link{arank}()}
 }
-
+\concept{array transformations}

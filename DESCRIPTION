@@ -1,5 +1,5 @@
 Package: mimager
-Version: 1.11.0
+Version: 1.11.1
 Type: Package
 Title: mimager: The Microarray Imager
 Description: Easily visualize and inspect microarrays for spatial
@@ -19,5 +19,5 @@ Suggests: knitr, rmarkdown, BiocStyle, testthat, lintr, Matrix, abind,
 VignetteBuilder: knitr
 URL: https://github.com/aaronwolen/mimager
 BugReports: https://github.com/aaronwolen/mimager/issues
-RoxygenNote: 5.0.1
+RoxygenNote: 7.0.1
 biocViews: Infrastructure, Visualization, Microarray
