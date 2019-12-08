@@ -14,7 +14,7 @@ Imports: BiocGenerics, S4Vectors, preprocessCore, grDevices, methods,
 Collate: 'mimager-package.r' 'all-generics.r' 'mimage.r' 'marray.r'
         'mindex.r' 'build-legend.r' 'checks.r' 'transformations.r'
         'utils-affy.r' 'utils-arrays.r' 'utils-plot.r'
-Suggests: knitr, rmarkdown, BiocStyle, testthat, lintr, Matrix, abind,
+Suggests: knitr, rmarkdown, BiocStyle, testthat, lintr (>= 2.0), Matrix, abind,
         affydata, hgu95av2cdf, oligoData, pd.hugene.1.0.st.v1
 VignetteBuilder: knitr
 URL: https://github.com/aaronwolen/mimager
